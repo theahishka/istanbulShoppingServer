@@ -3,11 +3,12 @@ const { compileString } = require("sass");
 const ordersRouter = express.Router();
 const Pool = require("pg").Pool;
 const connection = {
-	user: "postgres",
-	password: "154816",
-	host: "localhost",
+	user: "ocfpdkthksvjzp",
+	password:
+		"4f0c065c19a4e0d122caaa407fb2fcd194114e0a90071ff8cd06fb4429489cd6",
+	host: "ec2-52-18-116-67.eu-west-1.compute.amazonaws.com",
 	port: 5432,
-	database: "istanbul",
+	database: "dbj0hchqk7guvn",
 };
 
 // Verifying the orderId parameter was passed successfully and if such an order exists
@@ -37,6 +38,21 @@ ordersRouter.param("orderId", (req, res, next, orderId) => {
 			}
 		);
 	});
+});
+
+// testing route
+ordersRouter.get("/test", async (req, res, next) => {
+	try {
+		const pool = new Pool(connection);
+		await pool.connect();
+		const orders = await pool.query(
+			"SELECT * FROM orders ORDER BY order_id ASC"
+		);
+		res.status(200).json(orders);
+		await pool.end();
+	} catch (err) {
+		console.log(err);
+	}
 });
 
 // For getting all orders

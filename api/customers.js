@@ -2,11 +2,11 @@ const express = require("express");
 const customersRouter = express.Router();
 const Pool = require("pg").Pool;
 const connection = {
-	user: "postgres",
-	password: "154816",
-	host: "localhost",
+	user: "ocfpdkthksvjzp",
+	password: "4f0c065c19a4e0d122caaa407fb2fcd194114e0a90071ff8cd06fb4429489cd6",
+	host: "ec2-52-18-116-67.eu-west-1.compute.amazonaws.com",
 	port: 5432,
-	database: "istanbul",
+	database: "dbj0hchqk7guvn",
 };
 
 // Get all customers
