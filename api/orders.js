@@ -48,7 +48,7 @@ ordersRouter.get("/test", async (req, res, next) => {
 		const orders = await pool.query(
 			"SELECT * FROM orders ORDER BY order_id ASC"
 		);
-		res.status(200).json(orders);
+		res.status(200).send();
 		await pool.end();
 	} catch (err) {
 		console.log(err);

@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 const morgan = require("morgan");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -15,7 +15,7 @@ app.use("/api", apiRouter);
 
 app.use(errorhandler());
 
-app.listen(process.env.PORT || PORT, () => {
+app.listen(PORT, () => {
 	console.log(`Server is listening!`);
 });
 
