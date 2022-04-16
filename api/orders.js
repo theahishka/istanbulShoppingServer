@@ -1,19 +1,12 @@
 const express = require("express");
-const { compileString } = require("sass");
 const ordersRouter = express.Router();
 const Pool = require("pg").Pool;
 const connection = {
 	connectionString:
-		"postgres://ocfpdkthksvjzp:4f0c065c19a4e0d122caaa407fb2fcd194114e0a90071ff8cd06fb4429489cd6@ec2-52-18-116-67.eu-west-1.compute.amazonaws.com:5432/dbj0hchqk7guvn",
+		"postgres://aragdgeymsvoyv:796a31af5159c08d800873ea106ec4284d34366774403580a54099748cc30fa9@ec2-34-246-227-219.eu-west-1.compute.amazonaws.com:5432/dd13jdsnl4eu50",
 	ssl: {
 		rejectUnauthorized: false,
 	},
-	// user: "ocfpdkthksvjzp",
-	// password:
-	// 	"4f0c065c19a4e0d122caaa407fb2fcd194114e0a90071ff8cd06fb4429489cd6",
-	// host: "ec2-52-18-116-67.eu-west-1.compute.amazonaws.com",
-	// port: 5432,
-	// database: "dbj0hchqk7guvn",
 };
 
 // Verifying the orderId parameter was passed successfully and if such an order exists
@@ -25,16 +18,18 @@ ordersRouter.param("orderId", (req, res, next, orderId) => {
 	const pool = new Pool(connection);
 	pool.connect((err) => {
 		if (err) {
-			return console.log(err);
+			console.log(err);
+			return res.status(500).send();
 		}
 		pool.query(
 			"SELECT * FROM orders WHERE order_id = $1",
 			[orderId],
 			(err, data) => {
 				if (err) {
-					return console.log(err);
+					console.log(err);
+					return res.status(500).send();
 				}
-				if (!data) {
+				if (data.rows.length < 1) {
 					return res.status(404).send("No such order found");
 				}
 				req.order = data.rows;
@@ -45,62 +40,41 @@ ordersRouter.param("orderId", (req, res, next, orderId) => {
 	});
 });
 
-// testing route
-ordersRouter.get("/test", async (req, res, next) => {
+// For getting all orders
+ordersRouter.get("/", async (req, res, next) => {
 	try {
+		let all = {};
 		const pool = new Pool(connection);
+
 		await pool.connect();
+
 		const orders = await pool.query(
-			"SELECT * FROM orders ORDER BY order_id ASC"
+			"SELECT * FROM orders ORDER BY order_id DESC"
 		);
-		res.status(200).send(orders);
+		all.total = orders.rowCount;
+		all.orders = orders.rows;
+
+		const pendingOrders = await pool.query(
+			"SELECT * FROM orders WHERE pending = $1 ORDER BY order_id DESC",
+			["true"]
+		);
+		all.pendingOrders = pendingOrders.rows;
+
+		const pendingCount = await pool.query(
+			"SELECT COUNT(*) FROM orders WHERE pending = $1",
+			["true"]
+		);
+
+		all.pending = Number(pendingCount.rows[0].count);
+		all.completed = all.total - all.pending;
+
+		const boxes = await pool.query("SELECT COUNT(*) FROM boxes");
+		all.boxes = Number(boxes.rows[0].count);
+		res.status(200).send(all);
 		await pool.end();
 	} catch (err) {
 		console.log(err);
 	}
-});
-
-// For getting all orders
-ordersRouter.get("/", (req, res, next) => {
-	let all = {};
-	const pool = new Pool(connection);
-	pool.connect((err) => {
-		if (err) {
-			return console.log(err);
-		}
-		pool.query(
-			"SELECT * FROM orders ORDER BY order_id DESC",
-			(err, data) => {
-				if (err) {
-					return console.log(err);
-				}
-				all.total = data.rowCount;
-				all.orders = data.rows;
-				pool.query(
-					"SELECT COUNT(*) FROM orders WHERE pending = $1",
-					["true"],
-					(err, data) => {
-						if (err) {
-							return console.log(err);
-						}
-						all.pending = Number(data.rows[0].count);
-						all.completed = all.total - all.pending;
-						pool.query(
-							"SELECT COUNT(*) FROM boxes",
-							(err, data) => {
-								if (err) {
-									console.log(err);
-								}
-								all.boxes = Number(data.rows[0].count);
-								res.status(200).send(all);
-								pool.end();
-							}
-						);
-					}
-				);
-			}
-		);
-	});
 });
 
 // For getting detailed information for a single order
