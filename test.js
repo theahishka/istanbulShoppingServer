@@ -1,4 +1,4 @@
-const Pool = require("pg").Pool;
+const Pool = require("pg").Client;
 const connection = {
 	connectionString:
 		"postgres://doadmin:AVNS_iIGK-LkQKHLCKig@istanbulshopping-do-user-11377156-0.b.db.ondigitalocean.com:25060/defaultdb",
