@@ -18,5 +18,3 @@ app.use(errorhandler());
 app.listen(PORT, () => {
 	console.log(`Server is listening!`);
 });
-
-// module.exports = app;

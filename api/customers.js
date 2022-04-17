@@ -3,7 +3,7 @@ const customersRouter = express.Router();
 const Pool = require("pg").Pool;
 const connection = {
 	connectionString:
-		"postgres://aragdgeymsvoyv:796a31af5159c08d800873ea106ec4284d34366774403580a54099748cc30fa9@ec2-34-246-227-219.eu-west-1.compute.amazonaws.com:5432/dd13jdsnl4eu50",
+		"postgres://doadmin:AVNS_iIGK-LkQKHLCKig@istanbulshopping-do-user-11377156-0.b.db.ondigitalocean.com:25060/defaultdb",
 	ssl: {
 		rejectUnauthorized: false,
 	},
