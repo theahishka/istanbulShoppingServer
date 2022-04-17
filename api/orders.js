@@ -2,11 +2,11 @@ const express = require("express");
 const ordersRouter = express.Router();
 const Pool = require("pg").Client;
 const connection = {
-	connectionString:
-		"postgres://doadmin:AVNS_iIGK-LkQKHLCKig@istanbulshopping-do-user-11377156-0.b.db.ondigitalocean.com:25060/defaultdb",
-	ssl: {
-		rejectUnauthorized: false,
-	},
+	user: "postgres",
+	password: "154816",
+	host: "localhost",
+	port: 5432,
+	database: "istanbul",
 };
 
 // Verifying the orderId parameter was passed successfully and if such an order exists

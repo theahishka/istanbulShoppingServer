@@ -2,11 +2,11 @@ const express = require("express");
 const boxesRouter = express.Router();
 const Pool = require("pg").Client;
 const connection = {
-	connectionString:
-		"postgres://doadmin:AVNS_iIGK-LkQKHLCKig@istanbulshopping-do-user-11377156-0.b.db.ondigitalocean.com:25060/defaultdb",
-	ssl: {
-		rejectUnauthorized: false,
-	},
+	user: "postgres",
+	password: "154816",
+	host: "localhost",
+	port: 5432,
+	database: "istanbul",
 };
 
 // Get all boxes

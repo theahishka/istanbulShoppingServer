@@ -2,11 +2,11 @@ const express = require("express");
 const customersRouter = express.Router();
 const Pool = require("pg").Client;
 const connection = {
-	connectionString:
-		"postgres://doadmin:AVNS_iIGK-LkQKHLCKig@istanbulshopping-do-user-11377156-0.b.db.ondigitalocean.com:25060/defaultdb",
-	ssl: {
-		rejectUnauthorized: false,
-	},
+	user: "postgres",
+	password: "154816",
+	host: "localhost",
+	port: 5432,
+	database: "istanbul",
 };
 
 // Get all customers
@@ -31,6 +31,8 @@ customersRouter.post("/", async (req, res, next) => {
 	try {
 		const pool = new Pool(connection);
 		await pool.connect();
+
+		const joinedDate = new Date(Date.now());
 
 		const newCustomer = await pool.query(
 			"INSERT INTO customers (full_name, address, phone, comments, date_joined) VALUES ($1, $2, $3, $4, $5) RETURNING *",
