@@ -22,8 +22,8 @@ customersRouter.get("/", (req, res, next) => {
 				if (err) {
 					return console.log(err);
 				}
-				res.status(200).send(data.rows);
 				pool.end();
+				res.status(200).send(data.rows);
 			}
 		);
 	});
@@ -56,8 +56,8 @@ customersRouter.post("/", (req, res, next) => {
 					if (err) {
 						return console.log(err);
 					}
-					res.status(201).send(data.rows[0].customer_id);
 					pool.end();
+					res.status(201).send(data.rows[0].customer_id);
 				}
 			);
 		}

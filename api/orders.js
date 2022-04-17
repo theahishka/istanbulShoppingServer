@@ -70,8 +70,9 @@ ordersRouter.get("/", async (req, res, next) => {
 
 		const boxes = await pool.query("SELECT COUNT(*) FROM boxes");
 		all.boxes = Number(boxes.rows[0].count);
-		res.status(200).send(all);
+
 		await pool.end();
+		res.status(200).send(all);
 	} catch (err) {
 		console.log(err);
 	}
@@ -114,8 +115,8 @@ ordersRouter.get("/:orderId", (req, res, next) => {
 									return console.log(err);
 								}
 								orderDetails.itemsInfo = data.rows;
-								res.status(200).send(orderDetails);
 								pool.end();
+								res.status(200).send(orderDetails);
 							}
 						);
 					}
@@ -298,8 +299,8 @@ ordersRouter.post("/", async (req, res, next) => {
 				);
 			}
 		}
-		res.status(201).send(orderId);
 		await pool.end();
+		res.status(201).send(orderId);
 	} catch (err) {
 		console.log(err);
 	}
@@ -327,8 +328,8 @@ ordersRouter.delete("/:orderId", async (req, res, next) => {
 		await pool.query("DROP TABLE IF EXISTS order_items_" + orderId);
 		await pool.query("DROP TABLE IF EXISTS order_payments_" + orderId);
 
-		res.status(204).send();
 		await pool.end();
+		res.status(204).send();
 	} catch (err) {
 		console.log(err);
 	}
@@ -394,11 +395,11 @@ ordersRouter.put("/:orderId/customer", async (req, res, next) => {
 			]
 		);
 
+		await pool.end();
+
 		res.status(200).send(
 			"Order has been reallocated to another customer successfully"
 		);
-
-		await pool.end();
 	} catch (err) {
 		console.log(err);
 	}
@@ -458,11 +459,11 @@ ordersRouter.put("/:orderId/box", async (req, res, next) => {
 			]
 		);
 
+		await pool.end();
+
 		res.status(200).send(
 			"Order has been reallocated to another box successfully"
 		);
-
-		await pool.end();
 	} catch (err) {
 		console.log(err);
 	}
@@ -515,9 +516,9 @@ ordersRouter.put("/:orderId/delivered-date", async (req, res, next) => {
 			[updatedDeliveredDate, pending, orderId]
 		);
 
-		res.status(200).send("Delivery date has been updated successfully");
-
 		await pool.end();
+
+		res.status(200).send("Delivery date has been updated successfully");
 	} catch (err) {
 		console.log(err);
 	}
@@ -585,9 +586,9 @@ ordersRouter.post("/:orderId/payment", async (req, res, next) => {
 			[outstanding, pending, payments.rows.length, orderId]
 		);
 
-		res.status(201).send();
-
 		await pool.end();
+
+		res.status(201).send();
 	} catch (err) {
 		console.log(err);
 	}
@@ -654,8 +655,9 @@ ordersRouter.put("/:orderId/payments", async (req, res, next) => {
 			[outstanding, pending, orderId]
 		);
 
-		res.status(200).send();
 		await pool.end();
+
+		res.status(200).send();
 	} catch (err) {
 		console.log(err);
 	}
@@ -725,8 +727,9 @@ ordersRouter.delete("/:orderId/payment", async (req, res, next) => {
 			[outstanding, pending, payments.rows.length, orderId]
 		);
 
-		res.status(204).send();
 		await pool.end();
+
+		res.status(204).send();
 	} catch (err) {
 		console.log(err);
 	}
@@ -798,9 +801,9 @@ ordersRouter.put("/:orderId/total-delivery-cost", async (req, res, next) => {
 			);
 		}
 
-		res.status(200).send();
-
 		await pool.end();
+
+		res.status(200).send();
 	} catch (err) {
 		console.log(err);
 	}
@@ -990,8 +993,9 @@ ordersRouter.post("/:orderId/item", async (req, res, next) => {
 			]
 		);
 
-		res.status(201).send();
 		await pool.end();
+
+		res.status(201).send();
 	} catch (err) {
 		console.log(err);
 	}
@@ -1101,9 +1105,9 @@ ordersRouter.put("/:orderId/items", async (req, res, next) => {
 					orderId,
 				]
 			);
+			await pool.end();
 
-			res.status(200).send();
-			return await pool.end();
+			return res.status(200).send();
 		}
 
 		if (column === "item_cost") {
@@ -1165,8 +1169,9 @@ ordersRouter.put("/:orderId/items", async (req, res, next) => {
 				[newTotalCosts, newTotalItemCost, newTotalProfit, orderId]
 			);
 
-			res.status(200).send();
-			return await pool.end();
+			await pool.end();
+
+			return res.status(200).send();
 		}
 
 		await pool.query(
@@ -1178,8 +1183,8 @@ ordersRouter.put("/:orderId/items", async (req, res, next) => {
 			[newInfo, itemId]
 		);
 
-		res.status(200).send();
-		return await pool.end();
+		await pool.end();
+		return res.status(200).send();
 	} catch (err) {
 		console.log(err);
 	}
@@ -1338,8 +1343,8 @@ ordersRouter.delete("/:orderId/items", async (req, res, next) => {
 			]
 		);
 
-		res.status(204).send();
 		await pool.end();
+		res.status(204).send();
 	} catch (err) {
 		console.log(err);
 	}
