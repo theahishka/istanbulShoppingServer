@@ -22,5 +22,3 @@ const testing = async () => {
 };
 
 testing();
-
-// test
